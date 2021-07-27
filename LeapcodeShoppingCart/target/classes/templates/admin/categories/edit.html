@@ -1,0 +1,25 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="/fragments/head">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" th:replace="/fragments/nav :: nav-admin">
+</nav>
+<div class="container">
+    <h1 class="display-2" th:text="Edit">Edit a category</h1>
+    <a href="/admin/categories" class="btn btn-primary">Back to pages</a>
+
+    <div th:if="${message}" th:text="${message}" th:class="${'alert' + alertClass}"></div>
+    <form method="post" th:object="${category}" th:action="@{/admin/categories/edit}" >
+        <div class="form-group">
+            <label for="">Name</label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="Name">
+        </div>
+        <input type="hidden" th:field="*{id}" th:value="${category.id}">
+        <input type="hidden" th:field="*{sorting}" th:value="${category.sorting}">
+        <button class="btn btn-danger">Edit</button>
+    </form>
+</div>
+<footer class="container" th:replace="/fragments/footer">
+</footer>
+</body>
+</html>

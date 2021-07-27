@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="/fragments/head">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" th:replace="/fragments/nav :: nav-admin">
+</nav>
+<div class="container">
+    <h1 class="display-2">Pages</h1>
+    <a href="/admin/pages/add" class="btn btn-primary">Add new</a>
+
+    <table class="table sorting" id="pages">
+        <tr class="home">
+            <th>Title</th>
+            <th>Casing</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="page: ${pages}" th:id="'id_' + ${page.id}" th:class="${page.casing}">
+            <td th:text="${page.title}"></td>
+            <td th:text="${page.casing}"></td>
+            <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">Edit</a></td>
+            <td><a th:if="${page.casing != 'home'}" th:href="@{'/admin/pages/delete/' + ${page.id}}" class="confirmDeletion">Delete</a></td>
+        </tr>
+    </table>
+    <div th:unless="${!pages.empty}">
+        <p>There are no pages</p>
+    </div>
+</div>
+<footer class="container" th:replace="/fragments/footer">
+</footer>
+<script>
+    $("table#pages tbody").sortable({
+        items: "tr:not(.home)",
+        placeholder: "ui-state-highlight",
+        update: function() {
+            let ids = $("table#pages tbody").sortable("serialize");
+            let url = "/admin/pages/reorder";
+            $.post(url, ids, function (data) {
+                console.log(data);
+            });
+        }
+    });
+</script>
+</body>
+</html>

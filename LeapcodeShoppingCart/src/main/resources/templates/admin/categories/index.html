@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="/fragments/head">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" th:replace="/fragments/nav :: nav-admin">
+</nav>
+<div class="container">
+    <h1 class="display-2">Categories</h1>
+    <a href="/admin/categories/add" class="btn btn-primary">Add new</a>
+
+    <table class="table sorting" id="categories">
+        <tr class="home">
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="category: ${categories}" th:id="'id_' + ${category.id}">
+            <td th:text="${category.name}"></td>
+            <td><a th:href="@{'/admin/categories/edit/' + ${category.id}}">Edit</a></td>
+            <td><a th:href="@{'/admin/categories/delete/' + ${category.id}}" class="confirmDeletion">Delete</a></td>
+        </tr>
+    </table>
+    <div th:unless="${!categories.empty}">
+        <p>There are no categories</p>
+    </div>
+</div>
+<footer class="container" th:replace="/fragments/footer">
+</footer>
+<script>
+    $("table#categories tbody").sortable({
+        items: "tr:not(.home)",
+        placeholder: "ui-state-highlight",
+        update: function() {
+            let ids = $("table#categories tbody").sortable("serialize");
+            let url = "/admin/categories/reorder";
+            $.post(url, ids, function (data) {
+                console.log(data);
+            });
+        }
+    });
+</script>
+</body>
+</html>
